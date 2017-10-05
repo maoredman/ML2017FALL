@@ -1,13 +1,15 @@
+
 import numpy as np
 import csv
 import sys
 import os
 import errno
 
-# model: 5hrs PM2.5
-weights = np.array([-0.0359986, 0.40708025, -0.59976583, 0.07796411, 1.11630028, 0.81767872])
+weights = np.loadtxt('best_weights.txt')
+# weights = []
+# with open('objs.pickle') as f:
+#	weights = pickle.load(f)
 
-# Remember to run model and get weights before running this!!!
 test_AMB_TEMP = []
 test_CH4 = []
 test_CO = []
@@ -27,7 +29,7 @@ test_WIND_DIREC = []
 test_WIND_SPEED = []
 test_WS_HR = []
 
-window = 5
+window = 8
 
 with open(sys.argv[1], 'rt', encoding='big5') as infile:
     outname = sys.argv[2]
@@ -90,22 +92,26 @@ with open(sys.argv[1], 'rt', encoding='big5') as infile:
                 
                 # finished reading an id, can go to work now
                 features = np.array(test_PM2_5[-window:])
-                # test_PM25_squared = 0.01* (features ** 2)
-                # PM25_squared_last = PM25_squared[-1]
-                # test_PM25_deltas = np.array([(test_PM2_5[-i] - test_PM2_5[-i-1]) for i in range(1, window)])
-                # test_PM25_deltas_squared = 0.01 * (test_PM25_deltas ** 2)
-                # PM25_delta_last = PM2_5[idx+window-1] - PM2_5[idx+window-2]
-                # test_rain_deltas = np.array([(test_RAINFALL[-i] - test_RAINFALL[-i-1]) for i in range(1, window)])
-                # test_rain_delta_middle = test_rain_deltas[1]
-                # PM25_PM10 = np.sqrt(abs(features * np.array(PM10[idx: idx+window])))
-                # rain = np.array(test_RAINFALL[-window:])
-
-                # features = np.append(features, test_PM25_deltas)
-                # features = np.append(features, test_PM25_deltas_squared)
-                # features = np.append(features, test_rain_delta_middle)
-                # features = np.append(features, test_PM25_squared)
-                # features = np.append(features, rain)
-                features = np.append(features, 1.0)
+                features = np.append(features, test_RAINFALL[-window:])
+                # features = np.append(features, NMHC[idx:idx+window])
+                features = np.append(features, test_PM10[-window:])
+                features = np.append(features, test_O3[-window:])
+                # features = np.append(features, np.array(PM10[idx:idx+window])**2)
+                features = np.append(features, np.array(test_RAINFALL[-window:])**3)
+                features = np.append(features, test_NOx[-window:])
+                # features = np.append(features, np.array(PM2_5[idx+window-1])**2)
+                features = np.append(features, np.array(test_PM2_5[-window:]) * np.array(test_PM10[-window:]))
+                features = np.append(features, test_WIND_DIREC[-3:])
+                features = np.append(features, np.array(test_WIND_DIREC[-3:]) ** 2)
+                features = np.append(features, test_CH4[-window:])
+                features = np.append(features, np.array(test_CH4[-window:])**2)
+                features = np.append(features, np.array(test_WIND_DIREC[-window:])* np.array(test_PM2_5[-window:]))
+                features = np.append(features, test_WIND_SPEED[-3:])
+                features = np.append(features, test_RH[-window:])
+                features = np.append(features, np.array(test_RH[-window:])**2)
+                features = np.append(features, test_SO2[-window:])
+                features = np.append(features, np.array(test_SO2[-window:])**2)
+                features = np.append(features, [1.0])
 
                 prediction = sum(np.multiply(weights, features))
                 
