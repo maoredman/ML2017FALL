@@ -1,0 +1,10 @@
+*.csv
+old models/
+*.png
+tensorboard/
+*.docx
+logs/
+data/
+deepq_upload
+*.jpg
+HW2_logistic.ipynb
