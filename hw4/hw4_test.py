@@ -7,10 +7,13 @@ import pickle
 from keras.models import load_model
 from keras.preprocessing import sequence
 
-with open('tokenizer.pickle', 'rb') as handle:
-    tokenizer = pickle.load(handle)
+"""with open('tokenizer.pickle', 'rb') as handle:
+    tokenizer = pickle.load(handle)"""
 
-model_name = 'models/03-0.80.hdf5'
+with open('vocab.pickle', 'rb') as handle:
+    vocab = pickle.load(handle)
+
+model_name = 'models/cbow_GRU_128batch-02-0.82.hdf5'
 loaded_model = load_model(model_name)
 print('model loaded!')
 
@@ -20,10 +23,17 @@ with open(sys.argv[1], 'rt') as testfile:
     reader = csv.reader(testfile, delimiter=',')
     next(reader) # skip headings
     for row in reader:
-        x_submission.append(''.join(row[1:]))
+        # print(''.join(row[1:]))
+        words = []
+        # print(''.join(row[1:]).split())
+        for word in ''.join(row[1:]).split():
+            try:
+                words.append(vocab[word])
+            except:
+                words.append(0) ############ 0 actually corresponds to 'i'
+        x_submission.append(words)
 
 max_review_length = 40
-x_submission = tokenizer.texts_to_sequences(x_submission)   
 x_submission = sequence.pad_sequences(x_submission, maxlen=max_review_length)
 print('finished generating test data!')
 

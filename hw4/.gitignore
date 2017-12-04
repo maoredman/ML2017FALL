@@ -4,3 +4,5 @@ deepq_upload/
 *.docx
 *.hdf5
 *.xlsx
+preds/
+old_models/
