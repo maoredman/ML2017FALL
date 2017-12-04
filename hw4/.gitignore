@@ -2,7 +2,6 @@ data/
 deepq_upload/
 *.csv
 *.docx
-*.hdf5
 *.xlsx
 preds/
 old_models/
