@@ -1,0 +1,2 @@
+class RawExample(object):
+    pass
