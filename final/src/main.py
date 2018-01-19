@@ -200,18 +200,19 @@ def main():
 
 
 def read_dataset(json_file, itos, stoi, itoc, ctoi, cache_file, is_debug=False, split="train", wv_vec=None):
-    
+    '''
     if os.path.isfile(cache_file):
         print("Read built %s dataset from %s" % (split, cache_file), flush=True)
         dataset = pickle.load(open(cache_file, "rb"))
         print("Finished reading %s dataset from %s" % (split, cache_file), flush=True)
 
     else:
-        print("building %s dataset" % split, flush=True)
-        from utils.dataset import SQuAD
-        dataset = SQuAD(json_file, itos, stoi, itoc, ctoi, debug_mode=is_debug, split=split, wv_vec=wv_vec)
-        if split != "error":
-            pickle.dump(dataset, open(cache_file, "wb"))
+	'''
+    print("building %s dataset" % split, flush=True)
+    from utils.dataset import SQuAD
+    dataset = SQuAD(json_file, itos, stoi, itoc, ctoi, debug_mode=is_debug, split=split, wv_vec=wv_vec)
+    if split != "error":
+        pickle.dump(dataset, open(cache_file, "wb"))
     return dataset
 
 
