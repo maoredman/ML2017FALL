@@ -211,8 +211,10 @@ def read_dataset(json_file, itos, stoi, itoc, ctoi, cache_file, is_debug=False, 
     print("building %s dataset" % split, flush=True)
     from utils.dataset import SQuAD
     dataset = SQuAD(json_file, itos, stoi, itoc, ctoi, debug_mode=is_debug, split=split, wv_vec=wv_vec)
+    '''
     if split != "error":
         pickle.dump(dataset, open(cache_file, "wb"))
+    '''
     return dataset
 
 

@@ -24,7 +24,10 @@ def save_checkpoint(state, is_best, path, filename='checkpoint.pth.tar', best_fi
 
 def load_checkpoint(path, filename='model_best.pth.tar'):
     checkpint_best = os.path.join(path, filename)
-    state = torch.load(checkpint_best)
+    if torch.cuda.is_available():
+    	state = torch.load(checkpint_best)
+    else:
+        state = torch.load(checkpint_best, map_location=lambda storage, loc: storage)
     return state
 
 class Trainer(object):

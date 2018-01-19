@@ -184,23 +184,33 @@ class Model(nn.Module):
         USE_APPEARANCE = True
         USE_POS = False
         USE_TF = True
+        if torch.cuda.is_available():
+            if USE_APPEARANCE:
+                question.appearance_bit_tensor = question.appearance_bit_tensor.cuda()
+                passage.appearance_bit_tensor = passage.appearance_bit_tensor.cuda()
+            if USE_POS:
+                question.pos_tensor = question.pos_tensor.cuda()
+                passage.pos_tensor = passage.pos_tensor.cuda()   
+            if USE_TF:
+                question.term_frequency_tensor = question.term_frequency_tensor.cuda()
+                passage.term_frequency_tensor = passage.term_frequency_tensor.cuda()
         if USE_APPEARANCE:
             #import pdb
             #pdb.set_trace()
             # appearance is (B, T) (or (T, B)) -> (B, T, 1)
-            embedded_question = torch.cat((embedded_question, question.appearance_bit_tensor.unsqueeze(dim=-1).cuda()),\
+            embedded_question = torch.cat((embedded_question, question.appearance_bit_tensor.unsqueeze(dim=-1)),\
                     dim=-1)
-            embedded_passage = torch.cat((embedded_passage, passage.appearance_bit_tensor.unsqueeze(dim=-1).cuda()), \
+            embedded_passage = torch.cat((embedded_passage, passage.appearance_bit_tensor.unsqueeze(dim=-1)), \
                     dim=-1)
         if USE_POS:
-            embedded_question = torch.cat((embedded_question, question.pos_tensor.cuda()),\
+            embedded_question = torch.cat((embedded_question, question.pos_tensor),\
                     dim=-1)
-            embedded_passage = torch.cat((embedded_passage, passage.pos_tensor.cuda()),\
+            embedded_passage = torch.cat((embedded_passage, passage.pos_tensor),\
                     dim=-1)
         if USE_TF:
             
-            embedded_question = torch.cat((embedded_question, question.term_frequency_tensor.unsqueeze(dim=-1).cuda()), dim=-1)
-            embedded_passage = torch.cat((embedded_passage, passage.term_frequency_tensor.unsqueeze(dim=-1).cuda()), dim=-1)
+            embedded_question = torch.cat((embedded_question, question.term_frequency_tensor.unsqueeze(dim=-1)), dim=-1)
+            embedded_passage = torch.cat((embedded_passage, passage.term_frequency_tensor.unsqueeze(dim=-1)), dim=-1)
         #_, embedded_passage = question.tensor, passage.tensor
 
         if torch.cuda.is_available():
