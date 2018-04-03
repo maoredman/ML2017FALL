@@ -8,7 +8,7 @@ hw2: income prediction using **logistic regression**
 
 hw3: image sentiment prediction using **CNNs**
 
-hw4: sentence sentiment classification using **RNNs   
+hw4: sentence sentiment classification using **RNNs**
 
 hw5: movie rating prediction using **matrix factorization** and **DNNs**
 
